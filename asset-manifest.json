@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/kamiltouch-nft/static/css/main.f228a4a4.chunk.css",
+    "main.js": "/kamiltouch-nft/static/js/main.4000262c.chunk.js",
+    "main.js.map": "/kamiltouch-nft/static/js/main.4000262c.chunk.js.map",
+    "runtime-main.js": "/kamiltouch-nft/static/js/runtime-main.4e3768ea.js",
+    "runtime-main.js.map": "/kamiltouch-nft/static/js/runtime-main.4e3768ea.js.map",
+    "static/css/2.a77d2085.chunk.css": "/kamiltouch-nft/static/css/2.a77d2085.chunk.css",
+    "static/js/2.2e8eb730.chunk.js": "/kamiltouch-nft/static/js/2.2e8eb730.chunk.js",
+    "static/js/2.2e8eb730.chunk.js.map": "/kamiltouch-nft/static/js/2.2e8eb730.chunk.js.map",
+    "static/js/3.4e15cdfb.chunk.js": "/kamiltouch-nft/static/js/3.4e15cdfb.chunk.js",
+    "static/js/3.4e15cdfb.chunk.js.map": "/kamiltouch-nft/static/js/3.4e15cdfb.chunk.js.map",
+    "index.html": "/kamiltouch-nft/index.html",
+    "static/css/2.a77d2085.chunk.css.map": "/kamiltouch-nft/static/css/2.a77d2085.chunk.css.map",
+    "static/css/main.f228a4a4.chunk.css.map": "/kamiltouch-nft/static/css/main.f228a4a4.chunk.css.map",
+    "static/js/2.2e8eb730.chunk.js.LICENSE.txt": "/kamiltouch-nft/static/js/2.2e8eb730.chunk.js.LICENSE.txt",
+    "static/media/bg_image.cb662a76.jpg": "/kamiltouch-nft/static/media/bg_image.cb662a76.jpg",
+    "static/media/bootstrap-icons.css": "/kamiltouch-nft/static/media/bootstrap-icons.ea98e12d.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4e3768ea.js",
+    "static/css/2.a77d2085.chunk.css",
+    "static/js/2.2e8eb730.chunk.js",
+    "static/css/main.f228a4a4.chunk.css",
+    "static/js/main.4000262c.chunk.js"
+  ]
+}
