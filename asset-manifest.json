@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/kamiltouch-nft/static/css/main.f228a4a4.chunk.css",
-    "main.js": "/kamiltouch-nft/static/js/main.1b75a0a6.chunk.js",
-    "main.js.map": "/kamiltouch-nft/static/js/main.1b75a0a6.chunk.js.map",
+    "main.js": "/kamiltouch-nft/static/js/main.4c9219ed.chunk.js",
+    "main.js.map": "/kamiltouch-nft/static/js/main.4c9219ed.chunk.js.map",
     "runtime-main.js": "/kamiltouch-nft/static/js/runtime-main.297c3e11.js",
     "runtime-main.js.map": "/kamiltouch-nft/static/js/runtime-main.297c3e11.js.map",
     "static/css/2.a77d2085.chunk.css": "/kamiltouch-nft/static/css/2.a77d2085.chunk.css",
@@ -22,6 +22,6 @@
     "static/css/2.a77d2085.chunk.css",
     "static/js/2.f70e20dd.chunk.js",
     "static/css/main.f228a4a4.chunk.css",
-    "static/js/main.1b75a0a6.chunk.js"
+    "static/js/main.4c9219ed.chunk.js"
   ]
 }
