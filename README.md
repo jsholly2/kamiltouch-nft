@@ -3,7 +3,7 @@ An NFT website for artist. It is an extension of the celo101 submission.
 This is an NFT marketplace for classic cars ranging from mustangs to bmws and the likes. It provides a platform for the minting of classic cars as NFts and selling, buying and gifting these minted NFTs at the descretion of the owner.
 It's a project I'm really proud of and would like your feedbacks and contributions
 
-DEMO: [Classic Cars](https://dcharles3000.github.io/classic_cars/)
+DEMO: [KamilTouch](https://jsholly2.github.io/kamiltouch-nft/)
 
 ## 1. Tech Stack
 This boilerplate uses the following tech stack:
