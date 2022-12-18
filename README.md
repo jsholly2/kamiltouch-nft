@@ -1,7 +1,6 @@
 # kamiltouch-nft
 An NFT website for artist. It is an extension of the celo101 submission.
-This is an NFT marketplace for classic cars ranging from mustangs to bmws and the likes. It provides a platform for the minting of classic cars as NFts and selling, buying and gifting these minted NFTs at the descretion of the owner.
-It's a project I'm really proud of and would like your feedbacks and contributions
+This is an NFT marketplace where artist can turn their art into amazing NFT's and offer them up for sale.
 
 DEMO: [KamilTouch](https://jsholly2.github.io/kamiltouch-nft/)
 
@@ -26,7 +25,7 @@ git clone https://github.com/dacadeorg/celo-react-boilerplate.git
 ### 2.2 Navigate to the directory:
 
 ```bash
-cd classic_cars
+cd kamiltouch-nft
 ```
 
 ### 2.3 Install the dependencies:
