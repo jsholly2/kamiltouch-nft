@@ -2,7 +2,7 @@
 An NFT website for artist. It is an extension of the celo101 submission.
 This is an NFT marketplace where artist can turn their art into amazing NFT's and offer them up for sale.
 
-DEMO: [KamilTouch](https://jsholly2.github.io/kamiltouch-nft/)
+Live link: [KamilTouch](https://jsholly2.github.io/kamiltouch-nft/)
 
 ## 1. Tech Stack
 This boilerplate uses the following tech stack:
