@@ -22,14 +22,22 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
         uint256 tokenId;
         uint256 price;
         uint256 likes;
+        uint256 dislikes;
         bool sold;
     }
     
     mapping (uint => Painting) internal paintings;
     mapping (uint => mapping(address => bool)) hasLiked;
+    mapping (uint => mapping(address => bool)) hasDisliked;
 
     modifier onlyOwner(uint256 _index) {
         require(msg.sender == paintings[_index].owner, "Only owner can mint an NFT");
+        _;
+    }
+
+
+    modifier notOwner(uint256 _index) {
+        require(msg.sender != paintings[_index].owner, "Owners are not allowed for this function");
         _;
     }
 
@@ -50,15 +58,16 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
 		string memory _imageUrl,
         uint256 _price
     ) public {
+        require(Bytes(_imageUrl) > 0, "Image cannot be empty");
+        require(_price > 0, "Price cannot be less than or equal to 0");
         bool _sold = false;
-        uint256 _likes = 0;
-
 		paintings[counter.current()] = Painting(
 			payable(msg.sender),
 			_imageUrl,
             counter.current(),
             _price,
-            _likes,
+            0,
+            0,
 			_sold
 		);
 
@@ -68,7 +77,7 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
 
 // Function to buy an uploaded painting using the painting's index
 // it sends the money to be paid from the buyer to the owner of the painting
-    function buyPainting(uint _index) public payable  {
+    function buyPainting(uint _index) public payable  notOwner(_index){
         uint256 _price = paintings[_index].price;
         bool _sold = paintings[_index].sold;
 
@@ -82,6 +91,13 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
         paintings[_index].owner = payable(msg.sender);
         paintings[_index].sold = true;
 	}
+
+// function to sell a painting
+    function sellPainting(uint _index) public onlyOwner(_index) {
+        require(_sold, "Must be bought");
+        _transfer(_owner, address(this), _index);
+        paintings[_index].sold = false;
+    }
 
 
 // Function to read an uploaded painting using the index of the painting
@@ -99,16 +115,25 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
 			paintings[_index].tokenId,
             paintings[_index].price,
             paintings[_index].likes,
+            paintings[_index].dislikes,
 			paintings[_index].sold
         );
     }
 
 // Function to like a painting using the painting's index
-    function likePainting(uint _index) public {
+    function likePainting(uint _index) public notOwner(index){
         require(!hasLiked[_index][msg.sender], "Already liked");
 
         paintings[_index].likes++;
         hasLiked[_index][msg.sender] = true;
+    }
+
+// function to dislike a painting
+      function dislikePainting(uint _index) public notOwner(_index){
+        require(!hasDisliked[_index][msg.sender], "Already disliked");
+
+        paintings[_index].dislikes++;
+        hasDisliked[_index][msg.sender] = true;
     }
 
 

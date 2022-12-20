@@ -33,10 +33,10 @@ const App = function AppWrapper() {
             </Nav.Item>
           </Nav>
           <main className="main">
-            <div class="painting-search">
+            {/* <div class="painting-search">
               <input type="search" placeholder="Search" />
               <img src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="Seacrh icon" />
-            </div>
+            </div> */}
             <Nfts
               name="KamilTouch Artistry"
               updateBalance={getBalance}
