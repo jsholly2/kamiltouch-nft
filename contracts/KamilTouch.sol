@@ -58,6 +58,8 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
 		string memory _imageUrl,
         uint256 _price
     ) public {
+        require(Bytes(_imageUrl) > 0, "Image cannot be empty");
+        require(_price > 0, "Price cannot be less than or equal to 0");
         bool _sold = false;
 		paintings[counter.current()] = Painting(
 			payable(msg.sender),
@@ -121,7 +123,6 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
 // Function to like a painting using the painting's index
     function likePainting(uint _index) public notOwner(index){
         require(!hasLiked[_index][msg.sender], "Already liked");
-        require(msg.sender != paintings[_index].owner, "Can't like your own painting");
 
         paintings[_index].likes++;
         hasLiked[_index][msg.sender] = true;
