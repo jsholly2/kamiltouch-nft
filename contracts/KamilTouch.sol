@@ -4,22 +4,18 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 /// @title  KamilTouch NFT Smart Contract
-contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiver {
+contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage {
     using Counters for Counters.Counter;
     constructor() ERC721("KamilTouch", "KMT") {}
-    
-    // string private uri = "";
 
     Counters.Counter private counter;
     
     struct Painting {
         address payable owner;
         string imageUrl;
-        uint256 tokenId;
         uint256 price;
         uint256 likes;
         bool sold;
@@ -34,91 +30,108 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
     }
 
 
-    function safeMint(address to, string memory _uri) internal onlyOwner(counter.current()) {
-        uint256 _tokenId = counter.current();
-        
-        _safeMint(to, _tokenId);
-        _setTokenURI(_tokenId, _uri);
-
-        counter.increment();
-    }
-
-// Function to create a painting providing the
-// image url
-// price
+    /**
+        * @notice Function to create a painting providing the
+        * @param _imageUrl token's uri
+        * @param _price selling price of token
+     */
     function writePainting(
-		string memory _imageUrl,
+		string calldata _imageUrl,
         uint256 _price
     ) public {
         bool _sold = false;
         uint256 _likes = 0;
+        uint256 _tokenId = counter.current();
 
-		paintings[counter.current()] = Painting(
+        counter.increment();
+
+		paintings[_tokenId] = Painting(
 			payable(msg.sender),
 			_imageUrl,
-            counter.current(),
             _price,
             _likes,
 			_sold
 		);
-
-        safeMint(msg.sender, _imageUrl);
+        
+        _safeMint(msg.sender, _tokenId);
+        _setTokenURI(_tokenId, _imageUrl);
     }
 
 
-// Function to buy an uploaded painting using the painting's index
-// it sends the money to be paid from the buyer to the owner of the painting
-    function buyPainting(uint _index) public payable  {
-        uint256 _price = paintings[_index].price;
-        bool _sold = paintings[_index].sold;
+    /**
+        * @dev the selling price is transferred from the buyer to the owner/seller of the painting
+        * @notice Function to buy an uploaded painting using the painting's index
+    */
+    function buyPainting(uint _tokenId) public payable  {
+        Painting storage currentPainting = paintings[_tokenId];
+        require(msg.sender != currentPainting.owner, "Can't buy your own painting");
+        require(!currentPainting.sold, "Sorry, painting is already sold");
+        require(msg.value == currentPainting.price, "Invalid painting price");
+        
+        address _owner = currentPainting.owner;
+        currentPainting.owner = payable(msg.sender);
+        currentPainting.sold = true;
 
-        require(msg.sender != paintings[_index].owner, "Can't buy your own painting");
-        require(!_sold, "Sorry, painting is already sold");
-        require(msg.value >= _price, "Invalid painting price");
+        _transfer(_owner, msg.sender, _tokenId);
 
-        address _owner = ownerOf(_index);
-        _transfer(_owner, msg.sender, _index);
-        paintings[_index].owner.transfer(msg.value);
-        paintings[_index].owner = payable(msg.sender);
-        paintings[_index].sold = true;
+        (bool success,) = payable(_owner).call{value:msg.value}("");
+        require(success, "Transfer failed");
+        
 	}
 
 
-// Function to read an uploaded painting using the index of the painting
-    function readPainting(uint _index) public view returns (
-        address payable,
-		string memory,
-		uint256,
-        uint256,
-        uint256,
-		bool
-    ) {
-        return (
-            paintings[_index].owner, 
-			paintings[_index].imageUrl, 
-			paintings[_index].tokenId,
-            paintings[_index].price,
-            paintings[_index].likes,
-			paintings[_index].sold
-        );
+    /// @notice Function to read an uploaded painting using the tokenId of the painting
+    function readPainting(uint _tokenId) public view returns (Painting memory) {
+        return paintings[_tokenId];
     }
 
-// Function to like a painting using the painting's index
-    function likePainting(uint _index) public {
-        require(!hasLiked[_index][msg.sender], "Already liked");
+    /// @notice Function to like a painting using the painting's tokenId
+    function likePainting(uint _tokenId) public {
+        require(_exists(_tokenId), "NFT doesn't exist");
+        require(!hasLiked[_tokenId][msg.sender], "Already liked");
 
-        paintings[_index].likes++;
-        hasLiked[_index][msg.sender] = true;
+        paintings[_tokenId].likes++;
+        hasLiked[_tokenId][msg.sender] = true;
     }
 
 
 
-// The following functions are overrides required by Solidity.
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+    // The following functions are overrides required by Solidity.
+
+    /**
+     * @dev See {IERC721-transferFrom}.
+     * Changes is made to transferFrom to keep track and update the owner value in paintings
+     */
+    function transferFrom(
+        address from,
+        address to,
+        uint256 _tokenId
+    ) public override {
+        paintings[_tokenId].owner = payable(to);
+        super.transferFrom(from, to, _tokenId);
+    }
+
+    /**
+     * @dev See {IERC721-safeTransferFrom}.
+     * Changes is made to safeTransferFrom to keep track and update the owner value in paintings
+     */
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 _tokenId,
+        bytes memory data
+    ) public override {
+        paintings[_tokenId].owner = payable(to);
+        _safeTransfer(from, to, _tokenId, data);
+    }
+
+
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal
         override(ERC721, ERC721Enumerable)
     {
-        super._beforeTokenTransfer(from, to, tokenId);
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
@@ -143,12 +156,4 @@ contract KamilTouch is ERC721, ERC721Enumerable, ERC721URIStorage, IERC721Receiv
         return super.supportsInterface(interfaceId);
     }
 
-    function onERC721Received(
-        address,
-        address,
-        uint256,
-        bytes calldata
-    ) override external pure returns (bytes4) {
-        return this.onERC721Received.selector;
-    }
 }
